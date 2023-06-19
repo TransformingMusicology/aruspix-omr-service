@@ -1,0 +1,30 @@
+{
+  "name": "f-tempo-conversion",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node --no-warnings --loader ts-node/esm bin/www.js",
+    "watch": "nodemon --ignore node_modules/ --watch . --ext ts --exec \"npm start\""
+  },
+  "type": "module",
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "express-fileupload": "^1.4.0",
+    "hbs": "~4.0.4",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.3",
+    "@types/debug": "^4.1.8",
+    "@types/express": "^4.17.17",
+    "@types/express-fileupload": "^1.4.1",
+    "@types/http-errors": "^2.0.1",
+    "@types/morgan": "^1.9.4",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.3"
+  }
+}

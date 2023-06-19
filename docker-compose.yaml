@@ -1,0 +1,13 @@
+version: "3.4"
+
+services:
+  convert:
+    build: .
+    command: npm start
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - DEBUG=f-tempo-conversion:*
+    ports:
+      - "3000:3000"
