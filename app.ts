@@ -111,14 +111,18 @@ export function convert_mei_xslt(workingDir: string, meiName: string) {
   }
 }
 
-export async function run_image_query(image: fileUpload.UploadedFile, workingDir: string) {
+export async function run_image_query(image: fileUpload.UploadedFile, workingDir: string, doXslt: boolean) {
 
   const appPrefix = 'emo-upload';
   try {
     await image.mv(path.join(workingDir, image.name));
 
     const meiFilename = perform_omr_image(workingDir, image.name);
-    return convert_mei_xslt(workingDir, meiFilename);
+    if (doXslt) {
+      return convert_mei_xslt(workingDir, meiFilename);
+    } else {
+      return meiFilename;
+    }
   }
   catch (e) {
     console.error(`error when running stuff ${e}`);
@@ -141,11 +145,14 @@ app.post('/api/image_query', async function (req, res, next) {
     return res.status(400).json({status: "error", error: 'uploaded file must be named user_image_file'});
   }
 
+  const xsltParam = req.body.xslt;
+  const doXslt = xsltParam === 'true';
+
   let tmpDir: string | undefined;
   const appPrefix = 'emo-upload';
   try {
     tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix));
-    const result = await run_image_query(user_image, tmpDir);
+    const result = await run_image_query(user_image, tmpDir, doXslt);
     if (result) {
       return res.download(result, 'converted.mei', (err) => {
         if (err) {
