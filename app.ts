@@ -137,6 +137,9 @@ app.post('/api/image_query', async function (req, res, next) {
   }
 
   let user_image = req.files.user_image_file as fileUpload.UploadedFile;
+  if (user_image === undefined) {
+    return res.status(400).json({status: "error", error: 'uploaded file must be named user_image_file'});
+  }
 
   let tmpDir: string | undefined;
   const appPrefix = 'emo-upload';
@@ -151,9 +154,7 @@ app.post('/api/image_query', async function (req, res, next) {
         } else {
           try {
             if (tmpDir) {
-              console.log("rmsync")
               fs.rmSync(tmpDir, {recursive: true, force: true});
-              console.log("rmsync done");
             }
           } catch (e) {
             console.error(`An error has occurred while removing the temp folder at ${tmpDir}. Please remove it manually. Error: ${e}`);
