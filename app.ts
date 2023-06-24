@@ -111,6 +111,28 @@ export function convert_mei_xslt(workingDir: string, meiName: string) {
   }
 }
 
+export function convert_mei_sed(workingDir: string, meiName: string) {
+  const sedStatus = cp.spawnSync(
+      "sed",
+      ["-i", "-f", "/app/aruspixmei2m21.sed", meiName],
+      {cwd: workingDir})
+  if (sedStatus.status !== 0) {
+    console.error("Error when running 'sed'");
+    if ((sedStatus.error as NodeJS.ErrnoException).code === 'ENOENT') {
+      throw new NoSuchBinaryError('sed');
+    }
+    if (sedStatus.stdout !== null) {
+      console.error(sedStatus.stdout.toString());
+    }
+    if (sedStatus.stderr !== null) {
+      console.error(sedStatus.stderr.toString());
+    }
+    throw new ErrorRunningProgram('sed');
+  } else {
+    return meiName;
+  }
+}
+
 export async function run_image_query(image: fileUpload.UploadedFile, workingDir: string, doXslt: boolean) {
 
   const appPrefix = 'emo-upload';
@@ -119,7 +141,7 @@ export async function run_image_query(image: fileUpload.UploadedFile, workingDir
 
     const meiFilename = perform_omr_image(workingDir, image.name);
     if (doXslt) {
-      return convert_mei_xslt(workingDir, meiFilename);
+      return convert_mei_sed(workingDir, meiFilename);
     } else {
       return meiFilename;
     }
