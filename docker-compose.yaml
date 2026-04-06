@@ -3,6 +3,7 @@ version: "3.4"
 services:
   convert:
     build: .
+    platform: linux/amd64
     command: npm start
     volumes:
       - .:/app
