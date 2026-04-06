@@ -32,8 +32,8 @@ app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(fileUpload());
 app.use(express.urlencoded({ extended: false }));
+app.use(fileUpload());
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
@@ -167,7 +167,7 @@ app.post('/api/image_query', async function (req, res, next) {
     return res.status(400).json({status: "error", error: 'uploaded file must be named user_image_file'});
   }
 
-  const xsltParam = req.body.xslt;
+  const xsltParam = req.body?.xslt;
   const doXslt = xsltParam === 'true';
 
   let tmpDir: string | undefined;
